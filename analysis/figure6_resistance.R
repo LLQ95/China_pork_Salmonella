@@ -31,7 +31,7 @@ build_long <- function(df, label1, label2) {
   out
 }
 temp_long <- build_long(temp, "Cold", "Warm")
-inc_long  <- build_long(inc, "Low", "High")
+inc_long  <- build_long(inc, "High", "Low")
 
 base_theme <- theme_bw(base_size = 12) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, face = "bold"),
@@ -53,7 +53,7 @@ p_inc <- ggplot(inc_long, aes(x = drug, y = 100 * rate, fill = group)) +
   geom_col(position = position_dodge(0.82), width = 0.78) +
   geom_text(aes(label = star), position = position_dodge(0.82),
             vjust = -0.35, size = 4.5) +
-  scale_fill_manual(values = c("Low" = "#0C5395", "High" = "#F2641A")) +
+  scale_fill_manual(values = c("Low" = "#4C78A8", "High" = "#D62728")) +
   labs(title = "B. Income groups", x = NULL,
        y = "Resistance rate (%)", fill = NULL) +
   scale_y_continuous(limits = c(0, 100), expand = expansion(mult = c(0, 0.02))) +
