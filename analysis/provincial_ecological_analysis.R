@@ -55,9 +55,16 @@ write.csv(spearman_results, file.path(output_dir, "spearman_correlations.csv"),
           row.names = FALSE)
 
 # =============================================================================
-# 2. Full-data LASSO with five-fold cross-validation
+# 2. Standard full-data LASSO with five-fold cross-validation
+#
+# This is the descriptive "standard LASSO" reported in the Results. The five
+# candidate predictors are the variables that pass the full-data Spearman
+# screening in section 1. Both the standardization and this LASSO fit use all
+# 25 provinces. This section does not determine predictor stability: the
+# nested LOOCV in section 3 is built independently from all 17 candidate
+# variables and never reads the preselected lasso_vars defined above.
 # =============================================================================
-cat("\n[2] LASSO regression (five-fold cross-validation)\n")
+cat("\n[2] Standard LASSO regression (five-fold cross-validation)\n")
 library(glmnet)
 
 x_full <- scale(as.matrix(prov[, lasso_vars]))
@@ -80,6 +87,8 @@ cat("lambda.min =", signif(cv_full$lambda.min, 4), "\n")
 # In every outer leave-one-out fold the Spearman screening, the standardization
 # and the inner cross-validation are rebuilt on the training provinces only, so
 # no information from the held-out province enters the selection decision.
+# Each fold starts from all 17 candidate variables. The preselected lasso_vars
+# from section 2 are not used anywhere in this loop.
 # =============================================================================
 cat("\n[3] Leak-free nested LOOCV predictor selection frequency\n")
 selection_matrix <- matrix(FALSE, n_prov, length(candidate_vars),
