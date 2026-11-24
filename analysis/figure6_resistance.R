@@ -65,4 +65,6 @@ ggsave("outputs/Figure6_resistance_groups.png", fig,
        width = 13, height = 11, dpi = 600)
 ggsave("outputs/Figure6_resistance_groups.svg", fig,
        width = 13, height = 11)
-cat("Figure 6 saved (PNG and SVG)\n")
+ggsave("outputs/Figure6_resistance_groups.pdf", fig,
+       width = 13, height = 11)
+cat("Figure 6 saved (PNG, SVG and PDF)\n")
