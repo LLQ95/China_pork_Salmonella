@@ -58,6 +58,9 @@ base_theme <- theme_bw(base_size = 12) +
         panel.grid.minor = element_blank(),
         plot.title = element_text(face = "bold", size = 13))
 
+# Show the solid fill colors in the legend even though the bars are translucent.
+legend_guide <- guides(fill = guide_legend(override.aes = list(alpha = 1)))
+
 p_temp <- ggplot(temp_long, aes(x = drug, y = 100 * rate, fill = group)) +
   geom_col(position = position_dodge(0.82), width = 0.78, alpha = 0.55) +
   geom_point(data = prov_temp, aes(x = drug, y = 100 * prov_rate, group = group),
@@ -65,11 +68,12 @@ p_temp <- ggplot(temp_long, aes(x = drug, y = 100 * rate, fill = group)) +
              colour = "black", inherit.aes = FALSE) +
   geom_text(aes(label = star), position = position_dodge(0.82),
             vjust = -0.35, size = 4.5) +
-  scale_fill_manual(values = c("Cold" = "#4C78A8", "Warm" = "#E45756")) +
+  scale_fill_manual(values = c("Cold" = "#3F7CB2", "Warm" = "#E51A1D")) +
   labs(title = "A. Temperature groups", x = NULL,
        y = "Resistance rate (%)", fill = NULL) +
   scale_y_continuous(limits = c(0, 100), expand = expansion(mult = c(0, 0.02))) +
-  base_theme
+  base_theme +
+  legend_guide
 
 p_inc <- ggplot(inc_long, aes(x = drug, y = 100 * rate, fill = group)) +
   geom_col(position = position_dodge(0.82), width = 0.78, alpha = 0.55) +
@@ -78,11 +82,12 @@ p_inc <- ggplot(inc_long, aes(x = drug, y = 100 * rate, fill = group)) +
              colour = "black", inherit.aes = FALSE) +
   geom_text(aes(label = star), position = position_dodge(0.82),
             vjust = -0.35, size = 4.5) +
-  scale_fill_manual(values = c("Low" = "#72B7B2", "High" = "#F58518")) +
+  scale_fill_manual(values = c("Low" = "#0C5395", "High" = "#F2641A")) +
   labs(title = "B. Income groups", x = NULL,
        y = "Resistance rate (%)", fill = NULL) +
   scale_y_continuous(limits = c(0, 100), expand = expansion(mult = c(0, 0.02))) +
-  base_theme
+  base_theme +
+  legend_guide
 
 fig <- p_temp / p_inc
 
