@@ -21,17 +21,21 @@ star <- function(p) ifelse(is.na(p), "",
 # order drugs by the warm-region rate for a readable shared axis
 drug_order <- temp$drug[order(-temp$rate_2)]
 
-build_long <- function(df, label1, label2) {
-  out <- rbind(
-    data.frame(drug = df$drug, group = label1,
-               rate = df$rate_1, star = star(df$holm_province_t)),
-    data.frame(drug = df$drug, group = label2,
-               rate = df$rate_2, star = star(df$holm_province_t)))
+build_long <- function(df, labels, rate_cols) {
+  parts <- lapply(seq_along(labels), function(i) {
+    data.frame(drug = df$drug, group = labels[i],
+               rate = df[[rate_cols[i]]],
+               star = star(df$holm_province_t))
+  })
+  out <- do.call(rbind, parts)
   out$drug <- factor(out$drug, levels = drug_order)
+  out$group <- factor(out$group, levels = labels)
   out
 }
-temp_long <- build_long(temp, "Cold", "Warm")
-inc_long  <- build_long(inc, "High", "Low")
+# rate_1 is the cold group and rate_2 is the warm group; place Warm first.
+temp_long <- build_long(temp, c("Warm", "Cold"), c("rate_2", "rate_1"))
+# rate_1 is the high-income group and rate_2 is the low-income group.
+inc_long  <- build_long(inc, c("High", "Low"), c("rate_1", "rate_2"))
 
 base_theme <- theme_bw(base_size = 12) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, face = "bold"),
